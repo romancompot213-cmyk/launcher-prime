@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Launcher Prime</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #121212, #242424);
+            background-size: cover;
+            background-position: center;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .launcher-card {
+            background: rgba(20, 20, 20, 0.85);
+            border: 3px solid #8e24aa;
+            box-shadow: 0 0 20px #8e24aa;
+            border-radius: 12px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            color: #4caf50;
+            margin-top: 0;
+            text-shadow: 0 0 10px #4caf50;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        input, select {
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 2px solid #8e24aa;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            width: 240px;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+        }
+        input:focus, select:focus {
+            border-color: #4caf50;
+            box-shadow: 0 0 8px #4caf50;
+        }
+        button {
+            background-color: #4caf50;
+            color: black;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            width: 268px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px #4caf50;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #8e24aa;
+            color: white;
+            box-shadow: 0 0 15px #8e24aa;
+        }
+        button:disabled {
+            background-color: #555;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+        #status {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #4caf50;
+            font-weight: bold;
+        }
+        .bg-picker-label {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #aaa;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .bg-picker-label:hover {
+            color: #4caf50;
+        }
+        #bg-input {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="launcher-card">
+        <h1>Лаунчер Прайм</h1>
+        
+        <input type="text" id="username" placeholder="Нікнейм" value="Player" />
+        
+        <select id="version-select">
+            <option value="1.21.1">Minecraft 1.21.1</option>
+            <option value="1.20.4">Minecraft 1.20.4</option>
+            <option value="1.16.5">Minecraft 1.16.5</option>
+            <option value="1.12.2">Minecraft 1.12.2</option>
+        </select>
+
+        <button id="play-btn">ЗАПУСТИТИ</button>
+        <div id="status">Готовий до старту</div>
+
+        <label for="bg-input" class="bg-picker-label">Змінити фонову картинку</label>
+        <input type="file" id="bg-input" accept="image/*" />
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+        const playBtn = document.getElementById('play-btn');
+        const status = document.getElementById('status');
+        const usernameInput = document.getElementById('username');
+        const versionSelect = document.getElementById('version-select');
+        const bgInput = document.getElementById('bg-input');
+
+        bgInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.body.style.backgroundImage = `url('${event.target.result}')`;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        playBtn.addEventListener('click', () => {
+            const name = usernameInput.value;
+            const version = versionSelect.value;
+
+            status.innerText = 'Запуск ' + version + '...';
+            playBtn.disabled = true;
+
+            ipcRenderer.send('launch-game', name, version);
+        });
+
+        ipcRenderer.on('log', (event, msg) => {
+            status.innerText = msg;
+        });
+    </script>
+</body>
+</html>
