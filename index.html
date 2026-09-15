@@ -1,154 +1,172 @@
 <!DOCTYPE html>
-<html>
+<html lang="uk">
 <head>
-    <title>Launcher Prime</title>
+    <meta charset="UTF-8">
+    <title>Prime Launcher Pro</title>
     <style>
         body {
-            background: linear-gradient(135deg, #121212, #242424);
-            background-size: cover;
-            background-position: center;
+            background: linear-gradient(135deg, #0a0a0a, #14001a);
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
             margin: 0;
+            display: flex;
+            height: 100vh;
             overflow: hidden;
         }
-        .launcher-card {
-            background: rgba(20, 20, 20, 0.85);
-            border: 3px solid #8e24aa;
-            box-shadow: 0 0 20px #8e24aa;
-            border-radius: 12px;
+
+        /* Ліва професійна панель як у Prism */
+        .sidebar {
+            width: 220px;
+            background-color: #0f0f0f;
+            border-right: 2px solid #8e24aa;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 10px;
+            box-shadow: 5px 0 15px rgba(142, 36, 170, 0.3);
+        }
+
+        .logo-title {
+            color: #00e676;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #00e676;
+        }
+
+        .menu-btn {
+            background: transparent;
+            color: #aaa;
+            border: none;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 15px;
+            cursor: pointer;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            transition: 0.3s;
+        }
+
+        .menu-btn.active, .menu-btn:hover {
+            background-color: #8e24aa;
+            color: white;
+            box-shadow: 0 0 10px #8e24aa;
+        }
+
+        /* Головна робоча зона */
+        .main-content {
+            flex-1: 1;
             padding: 30px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            backdrop-filter: blur(10px);
+            justify-content: center;
+            position: relative;
+            width: 100%;
         }
-        h1 {
-            color: #4caf50;
-            margin-top: 0;
-            text-shadow: 0 0 10px #4caf50;
-            font-size: 24px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+
+        .window-panel {
+            background: rgba(15, 15, 15, 0.9);
+            border: 2px solid #8e24aa;
+            border-radius: 12px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 0 25px rgba(142, 36, 170, 0.5);
+            width: 350px;
         }
+
         input, select {
             padding: 12px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             border-radius: 6px;
             border: 2px solid #8e24aa;
-            background-color: #1a1a1a;
+            background-color: #0a0a0a;
             color: #ffffff;
-            width: 240px;
-            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
             outline: none;
-            transition: 0.3s;
+            font-size: 14px;
         }
+
         input:focus, select:focus {
-            border-color: #4caf50;
-            box-shadow: 0 0 8px #4caf50;
+            border-color: #00e676;
+            box-shadow: 0 0 10px #00e676;
         }
-        button {
-            background-color: #4caf50;
-            color: black;
-            padding: 12px;
+
+        .launch-btn {
+            background-color: #00e676;
+            color: #000;
+            padding: 14px;
             border: none;
             border-radius: 6px;
-            width: 268px;
+            width: 100%;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             text-transform: uppercase;
-            box-shadow: 0 0 15px #4caf50;
+            box-shadow: 0 0 15px #00e676;
             transition: 0.3s;
         }
-        button:hover {
+
+        .launch-btn:hover {
             background-color: #8e24aa;
             color: white;
             box-shadow: 0 0 15px #8e24aa;
         }
-        button:disabled {
-            background-color: #555;
-            box-shadow: none;
-            cursor: not-allowed;
-        }
+
         #status {
             margin-top: 20px;
-            font-size: 0.9em;
-            color: #4caf50;
+            color: #00e676;
             font-weight: bold;
-        }
-        .bg-picker-label {
-            margin-top: 15px;
-            font-size: 12px;
-            color: #aaa;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-        .bg-picker-label:hover {
-            color: #4caf50;
-        }
-        #bg-input {
-            display: none;
+            font-size: 14px;
+            text-shadow: 0 0 5px #00e676;
         }
     </style>
 </head>
 <body>
 
-    <div class="launcher-card">
-        <h1>Лаунчер Прайм</h1>
-        
-        <input type="text" id="username" placeholder="Нікнейм" value="Player" />
-        
-        <select id="version-select">
-            <option value="1.21.1">Minecraft 1.21.1</option>
-            <option value="1.20.4">Minecraft 1.20.4</option>
-            <option value="1.16.5">Minecraft 1.16.5</option>
-            <option value="1.12.2">Minecraft 1.12.2</option>
-        </select>
+    <!-- Професійне бічне меню -->
+    <div class="sidebar">
+        <div class="logo-title">PRIME PRO</div>
+        <button class="menu-btn active">Створення збірки</button>
+        <button class="menu-btn">Завантажити Моди</button>
+        <button class="menu-btn">Ресурспаки</button>
+        <button class="menu-btn">Налаштування</button>
+    </div>
 
-        <button id="play-btn">ЗАПУСТИТИ</button>
-        <div id="status">Готовий до старту</div>
+    <!-- Головне вікно запуску -->
+    <div class="main-content">
+        <div class="window-panel">
+            <input type="text" id="username" placeholder="Нікнейм пірата" value="PrimePlayer" />
+            
+            <select id="version-select">
+                <!-- Сюди автоматично підтягнуться всі версії з серверів Mojang -->
+                <option value="1.21.1">Minecraft 1.21.1</option>
+                <option value="1.20.4">Minecraft 1.20.4</option>
+                <option value="1.16.5">Minecraft 1.16.5</option>
+            </select>
 
-        <label for="bg-input" class="bg-picker-label">Змінити фонову картинку</label>
-        <input type="file" id="bg-input" accept="image/*" />
+            <button class="launch-btn" id="play-btn">Запустити гру</button>
+            <div id="status">Лаунчер Прайм готовий</div>
+        </div>
     </div>
 
     <script>
         const { ipcRenderer } = require('electron');
-        const playBtn = document.getElementById('play-btn');
-        const status = document.getElementById('status');
-        const usernameInput = document.getElementById('username');
-        const versionSelect = document.getElementById('version-select');
-        const bgInput = document.getElementById('bg-input');
-
-        bgInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    document.body.style.backgroundImage = `url('${event.target.result}')`;
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-
-        playBtn.addEventListener('click', () => {
-            const name = usernameInput.value;
-            const version = versionSelect.value;
-
-            status.innerText = 'Запуск ' + version + '...';
-            playBtn.disabled = true;
-
+        
+        document.getElementById('play-btn').addEventListener('click', () => {
+            const name = document.getElementById('username').value;
+            const version = document.getElementById('version-select').value;
+            document.getElementById('status').innerText = 'Завантаження ' + version + ' від Mojang...';
             ipcRenderer.send('launch-game', name, version);
         });
 
         ipcRenderer.on('log', (event, msg) => {
-            status.innerText = msg;
+            document.getElementById('status').innerText = msg;
         });
     </script>
 </body>
